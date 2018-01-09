@@ -7,12 +7,13 @@ use Carbon\Carbon;
 
 Class EloquentVueTables  implements VueTablesInterface  {
 
-  public function get($model, Array $fields) {
+  public function get($model, Array $fields, $raw = null) {
 
     extract(Input::only('query', 'limit', 'page', 'orderBy', 'ascending', 'byColumn'));
 
     $data = $model->select($fields);
-
+    $data = (isset($raw)) ? $data->selectRaw($raw) : $data;
+    
     if (isset($query) && $query) {
      $data = $byColumn==1?$this->filterByColumn($data, $query):
      $this->filter($data, $query, $fields);
