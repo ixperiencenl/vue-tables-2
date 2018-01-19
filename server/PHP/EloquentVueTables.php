@@ -56,6 +56,7 @@ return $data;
 
 protected function filter($data, $query, $fields) {
   foreach ($fields as $index=>$field):
+    $field = stripos($field, " AS ") !== false ? substr($field, 0, stripos($field, " AS")) : $field;
     $method = $index?"orWhere":"where";
     $data->{$method}($field,'LIKE',"%{$query}%");
   endforeach;
