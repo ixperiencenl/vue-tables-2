@@ -54,10 +54,12 @@ return $data;
 }
 
 protected function filter($data, $query, $fields) {
-  foreach ($fields as $index=>$field):
-    $method = $index?"orWhere":"where";
-    $data->{$method}($field,'LIKE',"%{$query}%");
-  endforeach;
+  $data->where(function($qry) use($data, $query, $fields) { 
+    foreach ($fields as $index => $field) { 
+      $method = $index ? "orWhere" : "where"; 
+      $qry->{$method}($field, 'LIKE', "%{$query}%"); 
+    } 
+  });
 
   return $data;
 }
